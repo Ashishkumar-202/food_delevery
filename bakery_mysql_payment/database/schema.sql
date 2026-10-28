@@ -1,0 +1,40 @@
+﻿CREATE DATABASE IF NOT EXISTS bakery_app;
+USE bakery_app;
+
+CREATE TABLE IF NOT EXISTS products (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  image VARCHAR(255),
+  price DECIMAL(10,2) NOT NULL,
+  description VARCHAR(255),
+  category VARCHAR(80) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  customer_name VARCHAR(120) NOT NULL,
+  email VARCHAR(120) NOT NULL,
+  phone VARCHAR(20) NOT NULL,
+  street VARCHAR(180) NOT NULL,
+  city VARCHAR(80) NOT NULL,
+  state VARCHAR(80) NOT NULL,
+  zip_code VARCHAR(20) NOT NULL,
+  country VARCHAR(80) NOT NULL,
+  total_amount DECIMAL(10,2) NOT NULL,
+  payment_method ENUM('COD','ONLINE') NOT NULL,
+  payment_status ENUM('PENDING','PAID','FAILED') DEFAULT 'PENDING',
+  razorpay_order_id VARCHAR(120),
+  razorpay_payment_id VARCHAR(120),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS order_items (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  order_id INT NOT NULL,
+  product_id VARCHAR(20) NOT NULL,
+  product_name VARCHAR(120) NOT NULL,
+  quantity INT NOT NULL,
+  price DECIMAL(10,2) NOT NULL,
+  FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
+);
